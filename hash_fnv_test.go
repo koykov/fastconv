@@ -5,19 +5,19 @@ import (
 	"testing"
 )
 
-func BenchmarkFnv132(b *testing.B) {
+func BenchmarkFnv32(b *testing.B) {
 	p := []byte("foobar")
 	r := uint32(0x31f0b262)
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		h := Fnv132(p)
+		h := Fnv32(p)
 		if h != r {
 			b.Error(h, "not equal to", r)
 		}
 	}
 }
 
-func BenchmarkFnv132Native(b *testing.B) {
+func BenchmarkFnv32Native(b *testing.B) {
 	p := []byte("foobar")
 	r := uint32(0x31f0b262)
 	b.ReportAllocs()
@@ -31,19 +31,19 @@ func BenchmarkFnv132Native(b *testing.B) {
 	}
 }
 
-func BenchmarkFnv1a32(b *testing.B) {
+func BenchmarkFnv32a(b *testing.B) {
 	p := []byte("foobar")
 	r := uint32(0xbf9cf968)
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		h := Fnv1a32(p)
+		h := Fnv32a(p)
 		if h != r {
 			b.Error(h, "not equal to", r)
 		}
 	}
 }
 
-func BenchmarkFnv1a32Native(b *testing.B) {
+func BenchmarkFnv32aNative(b *testing.B) {
 	p := []byte("foobar")
 	r := uint32(0xbf9cf968)
 	b.ReportAllocs()
@@ -57,19 +57,19 @@ func BenchmarkFnv1a32Native(b *testing.B) {
 	}
 }
 
-func BenchmarkFnv164(b *testing.B) {
+func BenchmarkFnv64(b *testing.B) {
 	p := []byte("foobar")
 	r := uint64(0x340d8765a4dda9c2)
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		h := Fnv164(p)
+		h := Fnv64(p)
 		if h != r {
 			b.Error(h, "not equal to", r)
 		}
 	}
 }
 
-func BenchmarkFnv164Native(b *testing.B) {
+func BenchmarkFnv64Native(b *testing.B) {
 	p := []byte("foobar")
 	r := uint64(0x340d8765a4dda9c2)
 	b.ReportAllocs()
@@ -83,19 +83,19 @@ func BenchmarkFnv164Native(b *testing.B) {
 	}
 }
 
-func BenchmarkFnv1a64(b *testing.B) {
+func BenchmarkFnv64a(b *testing.B) {
 	p := []byte("foobar")
 	r := uint64(0x85944171f73967e8)
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		h := Fnv1a64(p)
+		h := Fnv64a(p)
 		if h != r {
 			b.Error(h, "not equal to", r)
 		}
 	}
 }
 
-func BenchmarkFnv1a64Native(b *testing.B) {
+func BenchmarkFnv64aNative(b *testing.B) {
 	p := []byte("foobar")
 	r := uint64(0x85944171f73967e8)
 	b.ReportAllocs()

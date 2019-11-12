@@ -4,14 +4,14 @@ package fastconv
 // Note than loop-rolling is faster than simple loop only on long string (64+ symbols).
 
 const (
-	offset32        = uint32(2166136261)
-	offset64        = uint64(14695981039346656037)
-	prime32         = uint32(16777619)
-	prime64         = uint64(1099511628211)
+	offset32 = uint32(2166136261)
+	offset64 = uint64(14695981039346656037)
+	prime32  = uint32(16777619)
+	prime64  = uint64(1099511628211)
 )
 
 // Fast FNV-1 32 hash calculation.
-func Fnv132(p []byte) uint32 {
+func Fnv32(p []byte) uint32 {
 	h := offset32
 
 	for len(p) >= 8 {
@@ -63,12 +63,12 @@ func Fnv132(p []byte) uint32 {
 }
 
 // Fast FNV-1 32 hash calculation of string.
-func Fnv132String(s string) uint32 {
-	return Fnv132(StringToBytes(s))
+func Fnv32String(s string) uint32 {
+	return Fnv32(StringToBytes(s))
 }
 
 // Fast FNV-1a 32 hash calculation.
-func Fnv1a32(p []byte) uint32 {
+func Fnv32a(p []byte) uint32 {
 	h := offset32
 
 	for len(p) >= 8 {
@@ -105,12 +105,12 @@ func Fnv1a32(p []byte) uint32 {
 }
 
 // Fast FNV-1a 32 hash calculation of string.
-func Fnv1a32String(s string) uint32 {
-	return Fnv1a32(StringToBytes(s))
+func Fnv32aString(s string) uint32 {
+	return Fnv32a(StringToBytes(s))
 }
 
 // Fast FNV-1 64 hash calculation.
-func Fnv164(p []byte) uint64 {
+func Fnv64(p []byte) uint64 {
 	h := offset64
 
 	for len(p) >= 8 {
@@ -162,12 +162,12 @@ func Fnv164(p []byte) uint64 {
 }
 
 // Fast FNV-1 64 hash calculation of string.
-func Fnv164String(s string) uint64 {
-	return Fnv164(StringToBytes(s))
+func Fnv64String(s string) uint64 {
+	return Fnv64(StringToBytes(s))
 }
 
 // Fast FNV-1a 64 hash calculation.
-func Fnv1a64(p []byte) uint64 {
+func Fnv64a(p []byte) uint64 {
 	h := offset64
 
 	for len(p) >= 8 {
@@ -204,6 +204,6 @@ func Fnv1a64(p []byte) uint64 {
 }
 
 // Fast FNV-1a 64 hash calculation of string.
-func Fnv1a64String(s string) uint64 {
-	return Fnv1a64(StringToBytes(s))
+func Fnv64aString(s string) uint64 {
+	return Fnv64a(StringToBytes(s))
 }
