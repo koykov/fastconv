@@ -13,6 +13,16 @@ const (
 // Fast FNV-1 32 hash calculation.
 func Fnv32(p []byte) uint32 {
 	h := offset32
+	for _, c := range p {
+		h *= prime32
+		h ^= uint32(c)
+	}
+	return h
+}
+
+// Loop rolled version of FNV-1 32 for very long input.
+func Fnv32Long(p []byte) uint32 {
+	h := offset32
 
 	for len(p) >= 8 {
 		h *= prime32
@@ -64,11 +74,25 @@ func Fnv32(p []byte) uint32 {
 
 // Fast FNV-1 32 hash calculation of string.
 func Fnv32String(s string) uint32 {
-	return Fnv32(StringToBytes(s))
+	return Fnv32(S2B(s))
+}
+
+// Loop rolled version of FNV-1 32 for very long strings.
+func Fnv32StringLong(s string) uint32 {
+	return Fnv32Long(S2B(s))
 }
 
 // Fast FNV-1a 32 hash calculation.
 func Fnv32a(p []byte) uint32 {
+	h := offset32
+	for _, c := range p {
+		h = (h ^ uint32(c)) * prime32
+	}
+	return h
+}
+
+// Loop rolled version of FNV-1a 32 for very long input.
+func Fnv32aLong(p []byte) uint32 {
 	h := offset32
 
 	for len(p) >= 8 {
@@ -106,11 +130,26 @@ func Fnv32a(p []byte) uint32 {
 
 // Fast FNV-1a 32 hash calculation of string.
 func Fnv32aString(s string) uint32 {
-	return Fnv32a(StringToBytes(s))
+	return Fnv32a(S2B(s))
+}
+
+// Loop rolled FNV-1a 32 for very long strings.
+func Fnv32aStringLong(s string) uint32 {
+	return Fnv32aLong(S2B(s))
 }
 
 // Fast FNV-1 64 hash calculation.
 func Fnv64(p []byte) uint64 {
+	h := offset64
+	for _, c := range p {
+		h *= prime64
+		h ^= uint64(c)
+	}
+	return h
+}
+
+// Loop rolled version of FNV-1 64 for very long input.
+func Fnv64Long(p []byte) uint64 {
 	h := offset64
 
 	for len(p) >= 8 {
@@ -163,11 +202,25 @@ func Fnv64(p []byte) uint64 {
 
 // Fast FNV-1 64 hash calculation of string.
 func Fnv64String(s string) uint64 {
-	return Fnv64(StringToBytes(s))
+	return Fnv64(S2B(s))
+}
+
+// Loop rolled version of FNV-1 64 for very long strings.
+func Fnv64StringLong(s string) uint64 {
+	return Fnv64Long(S2B(s))
 }
 
 // Fast FNV-1a 64 hash calculation.
 func Fnv64a(p []byte) uint64 {
+	h := offset64
+	for _, c := range p {
+		h = (h ^ uint64(c)) * prime64
+	}
+	return h
+}
+
+// Loop rolled version of FNV-1a 64 for very long input.
+func Fnv64aLong(p []byte) uint64 {
 	h := offset64
 
 	for len(p) >= 8 {
@@ -205,5 +258,10 @@ func Fnv64a(p []byte) uint64 {
 
 // Fast FNV-1a 64 hash calculation of string.
 func Fnv64aString(s string) uint64 {
-	return Fnv64a(StringToBytes(s))
+	return Fnv64a(S2B(s))
+}
+
+// Loop rolled version of FNV-1a 64 for very long strings.
+func Fnv64aStringLong(s string) uint64 {
+	return Fnv64aLong(S2B(s))
 }

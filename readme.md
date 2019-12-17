@@ -48,5 +48,5 @@ BenchmarkFnv64a-8                 200000000    6.51 ns/op    0 B/op    0 allocs/
 BenchmarkFnv64aNative-8           50000000     24.7 ns/op    8 B/op    1 allocs/op
 ```
 
-Tech note: these function uses loop-rolling to speed-up hash calculation of long strings. On short string it has
+Tech note: function with suffix "Long" (eg. Fnv32Long) uses loop-rolling to speed-up hash calculation of long strings. On short string it has
 no effect or maybe a bit slowly than simple loop.
