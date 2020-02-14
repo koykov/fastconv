@@ -121,3 +121,14 @@ func BenchmarkCrc32Bytes4x8(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkCrc32Bytes16(b *testing.B) {
+	h := uint32(0x607650b0)
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		r := Crc32Bytes16(crc32In, 0)
+		if h != r {
+			b.Error(h, "not equal to", r)
+		}
+	}
+}

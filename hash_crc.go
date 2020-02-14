@@ -123,3 +123,40 @@ func Crc32Bytes4x8(data []byte, prevCrc32 uint32) uint32 {
 	}
 	return uint32(crc ^ 0xFFFFFFFF)
 }
+
+func Crc32Bytes16(data []byte, prevCrc32 uint32) uint32 {
+	var crc = int64(prevCrc32) ^ 0xFFFFFFFF
+
+	unroll := 4
+	bytesAtOnce := 16 * unroll
+
+	for len(data) >= bytesAtOnce {
+		for u := 0; u < unroll; u++ {
+			one := binary.LittleEndian.Uint32(data[0:4]) ^ uint32(crc)
+			two := binary.LittleEndian.Uint32(data[4:8])
+			three := binary.LittleEndian.Uint32(data[8:12])
+			four := binary.LittleEndian.Uint32(data[12:16])
+			crc = int64(Crc32Lookup[0][(four>>24)&0xFF] ^
+				Crc32Lookup[1][(four>>16)&0xFF] ^
+				Crc32Lookup[2][(four>>8)&0xFF] ^
+				Crc32Lookup[3][four&0xFF] ^
+				Crc32Lookup[4][(three>>24)&0xFF] ^
+				Crc32Lookup[5][(three>>16)&0xFF] ^
+				Crc32Lookup[6][(three>>8)&0xFF] ^
+				Crc32Lookup[7][three&0xFF] ^
+				Crc32Lookup[8][(two>>24)&0xFF] ^
+				Crc32Lookup[9][(two>>16)&0xFF] ^
+				Crc32Lookup[10][(two>>8)&0xFF] ^
+				Crc32Lookup[11][two&0xFF] ^
+				Crc32Lookup[12][(one>>24)&0xFF] ^
+				Crc32Lookup[13][(one>>16)&0xFF] ^
+				Crc32Lookup[14][(one>>8)&0xFF] ^
+				Crc32Lookup[15][one&0xFF])
+			data = data[16:]
+		}
+	}
+	for _, c := range data {
+		crc = (crc >> 8) ^ int64(Crc32Lookup[0][(crc&0xFF)^int64(c)])
+	}
+	return uint32(crc ^ 0xFFFFFFFF)
+}
