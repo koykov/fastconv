@@ -1,5 +1,9 @@
 package fastconv
 
+import (
+	"encoding/binary"
+)
+
 const (
 	Polynomial int64 = 0xEDB88320
 
@@ -9,13 +13,6 @@ const (
 	MaxSlice1     = 1
 	MaxSliceNoLut = 0
 )
-
-func swap(x uint32) uint32 {
-	return (x >> 24) |
-		((x >> 8) & 0x0000FF00) |
-		((x << 8) & 0x00FF0000) |
-		(x << 24)
-}
 
 func Crc32Bitwise(data []byte, prevCrc32 uint32) uint32 {
 	var crc = int64(prevCrc32) ^ 0xFFFFFFFF
@@ -63,19 +60,18 @@ func Crc32Byte1Tableless(data []byte, prevCrc32 uint32) uint32 {
 	return uint32(crc ^ 0xFFFFFFFF)
 }
 
-func Crc32Byte1Tableless2(data []byte, prevCrc32 uint32) uint32 {
+func Crc32Bytes4(data []byte, prevCrc32 uint32) uint32 {
 	var crc = int64(prevCrc32) ^ 0xFFFFFFFF
-	for _, b := range data {
-		crc = crc ^ int64(b)
-		c := (((crc << 31) >> 31) & ((Polynomial >> 7) ^ (Polynomial >> 1))) ^
-			(((crc << 30) >> 31) & ((Polynomial >> 6) ^ Polynomial)) ^
-			(((crc << 29) >> 31) & (Polynomial >> 5)) ^
-			(((crc << 28) >> 31) & (Polynomial >> 4)) ^
-			(((crc << 27) >> 31) & (Polynomial >> 3)) ^
-			(((crc << 26) >> 31) & (Polynomial >> 2)) ^
-			(((crc << 25) >> 31) & (Polynomial >> 1)) ^
-			(((crc << 24) >> 31) & Polynomial)
-		crc = int64((crc >> 8) ^ c)
+	for len(data) >= 4 {
+		one := binary.LittleEndian.Uint32(data[:4]) ^ uint32(crc)
+		crc = int64(Crc32Lookup[0][(one>>24)&0xFF] ^
+			Crc32Lookup[1][(one>>16)&0xFF] ^
+			Crc32Lookup[2][(one>>8)&0xFF] ^
+			Crc32Lookup[3][one&0xFF])
+		data = data[4:]
+	}
+	for _, c := range data {
+		crc = (crc >> 8) ^ int64(Crc32Lookup[0][(crc&0xFF)^int64(c)])
 	}
 	return uint32(crc ^ 0xFFFFFFFF)
 }
