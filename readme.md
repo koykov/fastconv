@@ -1,21 +1,13 @@
 # Fast conversion algorithms
 
-## Byte-string conversion
+## Byte-string-rune conversion
 
-`StringToBytes()` is equal to type cast `[]byte(s)`
+At the moment supports the following conversion:
+* `[]byte` -> `string` using `BytesToString()/B2S()`
+* `string` -> `[]byte` using `StringToBytes()/S2B()`
+* `[]byte` -> `[]rune` using `AppendBytesToRunes()/AppendB2R()`
+* `[]rune` -> `[]byte` using `AppendRunesToBytes()/AppendR2B()`
+* `string` -> `[]rune` using `AppendStringToRunes()/AppendS2R()`
+* `[]rune` -> `string` using `AppendRunesToString()/AppendR2S()`
 
-Benchmark:
-```
-BenchmarkStringToBytes-8          200000000    7.28 ns/op    0 B/op    0 allocs/op
-BenchmarkStringToBytesNative-8    50000000     33.4 ns/op    8 B/op    1 allocs/op
-```
-
-`BytesToString()` is equal to type cast `string(b)`
-
-Benchmark:
-```
-BenchmarkBytesToString-8          200000000    8.44 ns/op    0 B/op    0 allocs/op
-BenchmarkBytesToStringNative-8    100000000    13.7 ns/op    0 B/op    0 allocs/op
-```
-
-Note than usage of these functions may be unsafe, since original and result has the same underlying pointer.
+All functions perform fast conversions using unsafe cast and/or buffer approach.
